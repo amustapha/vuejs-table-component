@@ -1,6 +1,6 @@
 {
   "name": "vuejs-table-component",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Datatable component for redering paginated and searchable tables.",
   "author": "Abdulhakeem Adetunji Mustpaha",
   "main": "dist/vuejs-table-component.min.js",
