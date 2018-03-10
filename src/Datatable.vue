@@ -27,15 +27,12 @@
           v-else>
           <td
             v-for="column in columns"
+            :data-title="column.label"
             :key="column.field">
             <span v-if="column.format">
-              <vue-numeric
-                :value="resolve(row, column.field)"
+              <span
                 v-if="column.format.type == 'money'"
-                :currency=" column.format.symbol ? column.format.symbol : '₦' "
-                :precision="2"
-                :read-only="true"/>
-
+                >{{formatMoney(resolve(row, column.field), column.format.symbol ? column.format.symbol : '₦')}}</span>
               <span v-else-if="column.format.type == 'date'">
                 {{ parseDate(resolve(row, column.field), column.format.to) }}
               </span>
@@ -51,7 +48,7 @@
               </router-link>
             </span>
             <span v-else>{{ resolve(row, column.field, column.default) }}</span>
-
+&nbsp;
           </td>
         </tr>
       </tbody>
@@ -61,12 +58,10 @@
 </template>
 <script>
   import Pagination from './Pagination'
-  import VueNumeric from './VueNumeric'
 
   export default {
     components: {
-      Pagination,
-      VueNumeric
+      Pagination
     },
     props: {
       columns: {
@@ -88,7 +83,7 @@
         default: Array
       }
     },
-    data() {
+    data () {
       return {
         paginator: {
           page: 1,
@@ -121,10 +116,17 @@
       }
     },
     methods: {
-      parseDate(date, format) {
+      formatMoney (value, symbol) {
+        // value = Number(value)
+        if (String(value) === '') {
+          return '-'
+        }
+        return symbol + parseFloat(value).toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
+      },
+      parseDate (date, format) {
         return this.$moment(date).format(format)
       },
-      toggleSort(column) {
+      toggleSort (column) {
         if (column.sortable) {
           if (this.sort.by === column.field) {
             this.sort.ascending = !this.sort.ascending
@@ -134,14 +136,14 @@
           }
         }
       },
-      resolve(object, target, blank = '') {
+      resolve (object, target, blank = '') {
         const nest = target.split('.')
         for (const n of nest) {
           object = object[n]
         }
         return object !== undefined ? object : blank
       },
-      parseLink(url, object) {
+      parseLink (url, object) {
         let placeholder = ''
         do {
           placeholder = url.substring(url.lastIndexOf(':'), url.lastIndexOf('/'))
@@ -149,7 +151,7 @@
         } while (placeholder.length > 2 && url.includes(placeholder))
         return url
       },
-      bubbleSort() {
+      bubbleSort () {
         const rows = JSON.parse(JSON.stringify(this.dataset))
         if (rows.length === 0) {
           return
@@ -195,14 +197,13 @@
         this.paginator.available = rows.length
         this.rows = rows
       },
-      currentPage() {
+      currentPage () {
         return this.rows.slice((this.paginator.page - 1) * this.paginator.count, this.paginator.page * this.paginator.count)
       }
     }
   }
-
 </script>
-<style>
+<style scoped>
   tr > th > span {
     visibility: hidden;
     transition: opacity .2s, visibility .2s;
@@ -214,5 +215,74 @@
   tr > th:hover > span {
     visibility: visible;
     opacity: 1;
+  }
+
+  @media only screen and (max-width: 800px) {
+    /* Force table to not be like tables anymore */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr { border: 1px solid #ccc; }
+
+    td {
+      /* Behave like a "row" */
+      border: none;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      white-space: normal;
+      text-align:left;
+    }
+
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 35%;
+      padding-right: 10px;
+      white-space: nowrap;
+      text-align:left;
+      font-weight: bold;
+    }
+
+    /*
+    Label the data
+    */
+    td:before { content: attr(data-title); }
+  }
+
+  @media only screen and (max-width: 340px) {
+    td {
+      padding-top: 20px !important;
+    }
+  }
+  @media only screen and (min-width: 340px) and (max-width: 450px) {
+    td {
+      padding-left: 50% !important;
+    }
+  }
+  @media only screen and (min-width: 450px) and (max-width: 580px) {
+    td {
+      padding-left: 35% !important;
+    }
+  }
+  @media only screen and (min-width: 580px) and (max-width: 800px) {
+    td {
+      padding-left: 25% !important;
+    }
   }
 </style>

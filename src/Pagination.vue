@@ -61,7 +61,7 @@
       }
     },
     methods: {
-      paginationSequence() {
+      paginationSequence () {
         const maxPage = Math.ceil(this.paginator.available / this.paginator.count)
         let pages = []
         if (maxPage < 5) {
@@ -83,7 +83,6 @@
       }
     }
   }
-
 </script>
 <style>
 </style>
