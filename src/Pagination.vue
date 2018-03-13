@@ -1,18 +1,23 @@
 <template>
   <div class="">
     <div class="row">
-      <p class="col-xs-12 col-md-6">
+      <p class="col">
         <span>Showing {{ (paginator.count * (paginator.page - 1)) + 1 }} to {{ Math.min(paginator.count * paginator.page, paginator.available) }} of {{ paginator.available }} entries.
           <span v-if="paginator.available < paginator.total">
             Filtered from {{ paginator.total }} entries
           </span>
         </span>
+        <select v-model="paginator.count" class="form-control custom-select" style="width: 64px; height: 23px; padding-top: 0 ">
+          <option>50</option>
+          <option>100</option>
+          <option>250</option>
+        </select>
       </p>
       <nav
         aria-label="Page navigation"
-        class="col-xs-12 col-md-6">
+        class="col">
         <ul
-          class="pagination justify-content-end pull-right"
+          class="pagination justify-content-end pull-right pagination-sm"
           style="margin: 0;">
           <li
             class="page-item"
