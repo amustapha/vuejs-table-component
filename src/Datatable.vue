@@ -268,6 +268,7 @@
   @media only screen and (max-width: 340px) {
     td {
       padding-top: 20px !important;
+      padding-left: 6px;
     }
   }
   @media only screen and (min-width: 340px) and (max-width: 450px) {
