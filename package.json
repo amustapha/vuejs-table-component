@@ -19,9 +19,7 @@
   ],
   "homepage": "https://github.com/m-bryo/vuejs-table-component#readme",
   "license": "MIT",
-  "dependencies": {
-    "accounting-js": "^1.1.1"
-  },
+  "dependencies": {},
   "scripts": {
     "test": "cross-env BABEL_ENV=test ./node_modules/.bin/karma start test/karma.config.js",
     "test:watch": "cross-env BABEL_ENV=test ./node_modules/.bin/karma start test/karma.config.js --single-run=false",
