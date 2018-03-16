@@ -93,7 +93,7 @@
         },
         sort: {
           by: this.columns[0].field,
-          ascending: true
+          ascending: false
         },
         rows: []
       }

@@ -69,7 +69,7 @@
       paginationSequence () {
         const maxPage = Math.ceil(this.paginator.available / this.paginator.count)
         let pages = []
-        if (maxPage < 5) {
+        if (maxPage < 6) {
           pages = Array.from(Array(maxPage), (val, index) => index + 1)
         } else {
           pages = Array.from(Array(2), (val, index) => index + 1)
