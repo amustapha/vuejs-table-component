@@ -116,12 +116,16 @@
       }
     },
     methods: {
-      formatMoney (value, symbol) {
-        // value = Number(value)
-        if (String(value) === '') {
-          return '-'
+      formatMoney (value) {
+        const st = this.rawMoney(value)
+        if (st.includes('-')) {
+          return '-' + st.replace(/-/g, '')
         }
-        return symbol + parseFloat(value).toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
+        return st
+      },
+      rawMoney (value) {
+        value = Number(value)
+        return '₦' + parseFloat(value).toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
       },
       parseDate (date, format) {
         return this.$moment(date).format(format)
@@ -136,12 +140,16 @@
           }
         }
       },
-      resolve (object, target, blank = '') {
+      resolve (object, target, blank = '-') {
         const nest = target.split('.')
-        for (const n of nest) {
-          object = object[n]
+        try {
+          for (const n of nest) {
+            object = object[n]
+          }
+          return object !== undefined ? object : blank
+        } catch (e) {
+          return blank
         }
-        return object !== undefined ? object : blank
       },
       parseLink (url, object) {
         let placeholder = ''
